@@ -1,7 +1,11 @@
 import os
 from PIL import Image
+from packaging.version import Version
 
 import torch
+
+LANCZOS = Image.LANCZOS if Version(Image.__version__) >= Version("10.0.0") else Image.ANTIALIAS
+
 
 def cid2filename(cid, prefix):
     """
@@ -40,7 +44,7 @@ def default_loader(path):
         return pil_loader(path)
 
 def imresize(img, imsize):
-    img.thumbnail((imsize, imsize), Image.ANTIALIAS)
+    img.thumbnail((imsize, imsize), LANCZOS)
     return img
 
 def flip(x, dim):
